@@ -32,12 +32,15 @@ public class Path {
     }
 
     public void addSegments(Segment... segments) {
-        for(Segment segment : segments) {
+        for (Segment segment : segments) {
             this.segments.add(segment);
         }
+
+        this.segments.add(new Segment(RadialDrive.STRAIGHT_RADIUS, -.25, 100));
     }
 
     public void initDrive() {
+        step= 0;
         t1 = System.currentTimeMillis();
 
     }

@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 //import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,8 +28,6 @@ public class Robot extends TimedRobot {
 
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-
-  private long t1, t2;
 
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -49,7 +47,9 @@ public class Robot extends TimedRobot {
       driveMotorRight2);
 
   private RadialDrive radialDrive = new RadialDrive(leftGroup, rightGroup);
-  private Path path= new Path(radialDrive);
+  private Path path = new Path(radialDrive);
+
+  private AHRS ahrs = new AHRS();
 
   public Robot() {
 
@@ -73,6 +73,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    ahrs.resetDisplacement();
+
   }
 
   /**
@@ -116,6 +119,23 @@ public class Robot extends TimedRobot {
 
     path.autoDrive();
 
+    /*
+     * double angle = Utils.boundedAngle(ahrs);
+     * 
+     * double diff = Utils.minAngleDiff(angle, 180);
+     * 
+     * SmartDashboard.putNumber("diff", diff);
+     * 
+     * double sign = Math.signum(diff);
+     * 
+     * double speed = Math.min(Math.abs(diff) / 180 * 3, 0.5);
+     * 
+     * radialDrive.radialDrive(sign * 1e-8, speed, false);
+     * 
+     * SmartDashboard.putNumber("speed", speed);
+     * 
+     * // radialDrive.radialDrive(RadialDrive.STRAIGHT_RADIUS, 0.25, false);
+     */
   }
 
   /**
@@ -138,14 +158,23 @@ public class Robot extends TimedRobot {
 
     if (controller.getPOV() == 270) {
 
-      radius = -48;
-      turnAxis = -1;
+      radius = -24;
+
+    } else if (controller.getPOV() == 90) {
+
+      radius = 24;
 
     }
 
     SmartDashboard.putNumber("forwardAxis", forwardAxis);
     SmartDashboard.putNumber("turnAxis", turnAxis);
     SmartDashboard.putNumber("radius", radius);
+
+    SmartDashboard.putNumber("heading", Utils.boundedAngle(ahrs));
+
+    SmartDashboard.putNumber("x", ahrs.getDisplacementX());
+    SmartDashboard.putNumber("y", ahrs.getDisplacementY());
+    SmartDashboard.putNumber("x", ahrs.getDisplacementZ());
 
     radialDrive.radialDrive(radius, forwardAxis);
 

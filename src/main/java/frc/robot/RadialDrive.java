@@ -2,13 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
+// hello world
 public class RadialDrive {
 
     private static final double ROBOT_WIDTH = 20.5;
 
     public static final double STRAIGHT_RADIUS = 1e8;
 
-    public static final double SPEED_LIMIT = 0.3;
+    public static final double SPEED_LIMIT = 0.6;
     
     private double RADIUS_SCALE_FACTOR = 1;
 

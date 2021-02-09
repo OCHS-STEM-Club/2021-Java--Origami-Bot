@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 public class Utils {
 
     private static double INPUT_SCALE_FACTOR = 100;
@@ -22,7 +24,7 @@ public class Utils {
     }
 
     public static int sign(double value) {
-        if(Double.doubleToRawLongBits(value) == Double.doubleToRawLongBits(NEGATIVE_ZERO)) {
+        if (Double.doubleToRawLongBits(value) == Double.doubleToRawLongBits(NEGATIVE_ZERO)) {
             return -1;
         } else if (value == 0) {
             return 1;
@@ -31,6 +33,41 @@ public class Utils {
         } else {
             return -1;
         }
+    }
+
+    public static double modulo(double in, double by) {
+
+        double ret = in % by;
+
+        if (ret < 0) {
+            ret += by;
+        }
+
+        return ret;
+
+    }
+
+    public static double boundedAngle(AHRS ahrs) {
+        return modulo(ahrs.getAngle(), 360);
+    }
+
+    public static boolean inRange(double value, double min, double max) {
+
+        return value <= max && value >= min;
+
+    }
+
+    public static double minAngleDiff(double angle, double target) {
+
+        double a1 = angle - target;
+        double a2 = 360 - angle - target;
+
+        if (Math.abs(a1) < Math.abs(a2)) {
+            return (a1);
+        } else {
+            return (a2);
+        }
+
     }
 
 }
