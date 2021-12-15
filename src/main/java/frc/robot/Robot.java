@@ -33,18 +33,17 @@ public class Robot extends TimedRobot {
 
   private XboxController controller = new XboxController(0);
 
-  private WPI_TalonSRX driveMotorLeft = new WPI_TalonSRX(1);
-  private WPI_TalonSRX driveMotorRight = new WPI_TalonSRX(4);
+  private WPI_TalonSRX driveMotorLeft = new WPI_TalonSRX(3);
+  private WPI_TalonSRX driveMotorRight = new WPI_TalonSRX(5);
 
-  private WPI_TalonSRX driveMotorLeft1 = new WPI_TalonSRX(2);
-  private WPI_TalonSRX driveMotorLeft2 = new WPI_TalonSRX(3);
+  //private WPI_TalonSRX driveMotorLeft1 = new WPI_TalonSRX(2);
+ // private WPI_TalonSRX driveMotorLeft2 = new WPI_TalonSRX(3);
 
-  private WPI_TalonSRX driveMotorRight1 = new WPI_TalonSRX(5);
-  private WPI_TalonSRX driveMotorRight2 = new WPI_TalonSRX(6);
+ // private WPI_TalonSRX driveMotorRight1 = new WPI_TalonSRX(3);
+ // private WPI_TalonSRX driveMotorRight2 = new WPI_TalonSRX(6);
 
-  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(driveMotorLeft, driveMotorLeft1, driveMotorLeft2);
-  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(driveMotorRight, driveMotorRight1,
-      driveMotorRight2);
+  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(driveMotorLeft);
+  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(driveMotorRight);
 
   private RadialDrive radialDrive = new RadialDrive(leftGroup, rightGroup);
   private Path path = new Path(radialDrive);
@@ -55,10 +54,10 @@ public class Robot extends TimedRobot {
 
     driveMotorLeft.getSensorCollection().setQuadraturePosition(0, 10);
     driveMotorRight.getSensorCollection().setQuadraturePosition(0, 10);
-    driveMotorLeft1.follow(driveMotorLeft);
-    driveMotorLeft2.follow(driveMotorLeft);
-    driveMotorRight1.follow(driveMotorRight);
-    driveMotorRight2.follow(driveMotorRight);
+    //driveMotorLeft1.follow(driveMotorLeft);
+    //dMotoriverLeft2.follow(driveMotorLeft);
+    //driveMotorRight1.follow(driveMotorRight);
+    //driveMotorRight2.follow(driveMotorRight);
     SmartDashboard.putNumber("TurnScaleFactor1", 200);
     SmartDashboard.putNumber("TurnScaleFactor2", 1.05);
     path.addSegments(GeneratedPath.MAIN);
@@ -144,14 +143,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    double forwardAxis = controller.getRawAxis(3) - controller.getRawAxis(2);
-    forwardAxis = Utils.scaleAxis(forwardAxis);
+    //double forwardAxis = controller.getRawAxis(3) - controller.getRawAxis(2);
+    //forwardAxis = Utils.scaleAxis(forwardAxis);
+    double forwardAxis=controller.getRawAxis(1);
 
     if (controller.getRawButton(1)) {
-      forwardAxis = 0.5 * forwardAxis;
+      forwardAxis = 0.3 * forwardAxis;
     }
 
-    double turnAxis = controller.getRawAxis(0);
+    double turnAxis = controller.getRawAxis(4);
     double radius;
 
     radius = Utils.getRadius(turnAxis);
