@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 //import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,6 +35,12 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private XboxController controller = new XboxController(0);
+
+  private DoubleSolenoid speedSoleniod = new DoubleSolenoid(2, 6, 7);
+  
+  public void setSpeedSoleniod(DoubleSolenoid speedSoleniod) {
+      this.speedSoleniod = speedSoleniod;
+  }
 
   private WPI_TalonSRX driveMotorLeft = new WPI_TalonSRX(3);
   private WPI_TalonSRX driveMotorRight = new WPI_TalonSRX(5);
@@ -72,6 +81,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    speedSoleniod.set(kReverse);
+
 
     ahrs.resetDisplacement();
 
@@ -142,6 +153,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
+    if (controller.getRawButton(2)) {
+      speedSoleniod.toggle();
+   }
 
     //double forwardAxis = controller.getRawAxis(3) - controller.getRawAxis(2);
     //forwardAxis = Utils.scaleAxis(forwardAxis);
